@@ -6,3 +6,12 @@ spring:
     port: 5672
     username: guest
     password: guest
+    cache:
+      channel:
+        size: 25
+      connection:
+        mode: channel
+    listener:
+      simple:
+        concurrency: 5
+        max-concurrency: 10

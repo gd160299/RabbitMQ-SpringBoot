@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -13,13 +12,16 @@ import java.util.Map;
 @Service
 public class Producer {
 
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
+    private final RabbitTemplate rabbitTemplate;
 
-    @Autowired
-    private RabbitAdmin rabbitAdmin;
+    private final RabbitAdmin rabbitAdmin;
 
     private static final Logger logger = LoggerFactory.getLogger(Producer.class);
+
+    public Producer(RabbitTemplate rabbitTemplate, RabbitAdmin rabbitAdmin) {
+        this.rabbitTemplate = rabbitTemplate;
+        this.rabbitAdmin = rabbitAdmin;
+    }
 
     public void sendMessageWithRoutingKey(String exchangeName, String exchangeType, String queueName, String routingKey, String message) {
         logger.info("Begin: Preparing to send message to queue: {} with routing key: {}", queueName, routingKey);
@@ -36,7 +38,7 @@ public class Producer {
 
     public void sendMessageWithHeaders(String exchangeName, String queueName, Map<String, Object> headers, String message) {
         logger.info("Begin: Preparing to send message to queue: {} with headers: {}", queueName, headers.size());
-        Queue queue = new Queue(queueName, false);
+        Queue queue = new Queue(queueName, true);
         HeadersExchange exchange = new HeadersExchange(exchangeName);
 
         rabbitAdmin.declareQueue(queue);
