@@ -1,47 +1,38 @@
 package org.pj.rabbitmqspring.restController;
 
 
-import org.pj.rabbitmqspring.restController.response.ApiResponse;
-import org.pj.rabbitmqspring.service.receive.MessageHandler;
-import org.pj.rabbitmqspring.restController.request.ExchangeRequest;
-import org.pj.rabbitmqspring.service.receive.Consumer;
-import org.pj.rabbitmqspring.service.send.Producer;
+import org.pj.rabbitmqspring.model.request.ExchangeRequest;
+import org.pj.rabbitmqspring.model.response.ApiResponse;
+import org.pj.rabbitmqspring.service.rabbitMq.IMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/rabbitmq")
 public class MessageRestController {
 
-    @Autowired
-    private Producer producer;
+    private final IMessageService messageService;
 
     @Autowired
-    private Consumer consumer;
+    public MessageRestController(IMessageService messageService) {
+        this.messageService = messageService;
+    }
 
     // API cho Direct, Fanout, Topic Exchange
     @PostMapping("/send")
     public ResponseEntity<ApiResponse> sendMessage(@RequestBody ExchangeRequest request) {
-        try {
-            producer.sendMessageWithRoutingKey(request.getExchangeName(), request.getExchangeType(), request.getQueueName(), request.getRoutingKey(), request.getMessage());
-            consumer.receiveMessage(request.getQueueName(), new MessageHandler());
-            return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), "Message sent successfully"));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500, "Error occurred: " + e.getMessage()));
-        }
+        ApiResponse response = messageService.sendMessageWithRoutingKey(request);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
     // API cho Headers Exchange
     @PostMapping("/send/headers")
     public ResponseEntity<ApiResponse> sendMessageWithHeaders(@RequestBody ExchangeRequest request) {
-        try {
-            producer.sendMessageWithHeaders(request.getExchangeName(), request.getQueueName(), request.getHeaders(), request.getMessage());
-            consumer.receiveMessage(request.getQueueName(), new MessageHandler());
-            return ResponseEntity.ok(new ApiResponse(HttpStatus.OK.value(), "Message sent successfully"));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500, "Error occurred: " + e.getMessage()));
-        }
+        ApiResponse response = messageService.sendMessageWithHeaders(request);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 }

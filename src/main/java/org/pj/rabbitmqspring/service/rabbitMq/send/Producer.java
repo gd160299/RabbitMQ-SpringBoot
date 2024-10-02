@@ -1,4 +1,4 @@
-package org.pj.rabbitmqspring.service.send;
+package org.pj.rabbitmqspring.service.rabbitMq.send;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +37,7 @@ public class Producer {
     }
 
     public void sendMessageWithHeaders(String exchangeName, String queueName, Map<String, Object> headers, String message) {
-        logger.info("Begin: Preparing to send message to queue: {} with headers: {}", queueName, headers.size());
+        logger.info("Begin: Preparing to send message {} to queue: {}", message, queueName);
         Queue queue = new Queue(queueName, true);
         HeadersExchange exchange = new HeadersExchange(exchangeName);
 
@@ -49,7 +49,7 @@ public class Producer {
         properties.setHeaders(headers);
         Message msg = new Message(message.getBytes(), properties);
         rabbitTemplate.convertAndSend(exchangeName, "", msg);
-        logger.info("End: Message sent to exchange: {} with headers: {}", exchangeName, headers.size());
+        logger.info("End: Send message successful to exchange: {}", exchangeName);
     }
 
     private Exchange createExchange(String exchangeName, String exchangeType) {
@@ -58,7 +58,7 @@ public class Producer {
             case "fanout" -> new FanoutExchange(exchangeName);
             case "topic" -> new TopicExchange(exchangeName);
             case "headers" -> new HeadersExchange(exchangeName);
-            default -> throw new IllegalArgumentException("Unsupported exchange type: " + exchangeType);
+            default -> throw new IllegalArgumentException();
         };
     }
 }

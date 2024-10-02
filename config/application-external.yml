@@ -1,0 +1,11 @@
+server:
+  port: 8082
+rabbitmq:
+  cache:
+    channel:
+      size: 25
+    connection:
+      mode: channel
+  listener:
+    concurrency: 5
+    max-concurrency: 10

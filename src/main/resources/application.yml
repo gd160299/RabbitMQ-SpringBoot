@@ -1,5 +1,6 @@
 server:
-  port: 8082
+  port: ${server.port:8080}
+
 spring:
   rabbitmq:
     host: localhost
@@ -8,10 +9,12 @@ spring:
     password: guest
     cache:
       channel:
-        size: 25
+        size: ${rabbitmq.cache.channel.size:25}
       connection:
-        mode: channel
+        mode: ${rabbitmq.cache.connection.mode:channel}
     listener:
       simple:
-        concurrency: 5
-        max-concurrency: 10
+        concurrency: ${rabbitmq.listener.concurrency:5}
+        max-concurrency: ${rabbitmq.listener.max-concurrency:10}
+  config:
+    import: file:./config/application-external.yml

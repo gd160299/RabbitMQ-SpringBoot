@@ -1,4 +1,4 @@
-package org.pj.rabbitmqspring.restController.response;
+package org.pj.rabbitmqspring.model.response;
 
 import lombok.Getter;
 import lombok.Setter;
