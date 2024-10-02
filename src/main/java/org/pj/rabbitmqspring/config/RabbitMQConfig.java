@@ -1,4 +1,4 @@
-package org.pj.rabbitmqspring.Config;
+package org.pj.rabbitmqspring.config;
 
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;

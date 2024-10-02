@@ -1,11 +1,11 @@
-package org.pj.rabbitmqspring.RestController;
+package org.pj.rabbitmqspring.restController;
 
 
-import org.pj.rabbitmqspring.RestController.Response.ApiResponse;
-import org.pj.rabbitmqspring.Service.Receive.MessageHandler;
-import org.pj.rabbitmqspring.RestController.Request.ExchangeRequest;
-import org.pj.rabbitmqspring.Service.Receive.Consumer;
-import org.pj.rabbitmqspring.Service.Send.Producer;
+import org.pj.rabbitmqspring.restController.response.ApiResponse;
+import org.pj.rabbitmqspring.service.receive.MessageHandler;
+import org.pj.rabbitmqspring.restController.request.ExchangeRequest;
+import org.pj.rabbitmqspring.service.receive.Consumer;
+import org.pj.rabbitmqspring.service.send.Producer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

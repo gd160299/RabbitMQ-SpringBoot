@@ -1,4 +1,4 @@
-package org.pj.rabbitmqspring.Service.Receive;
+package org.pj.rabbitmqspring.service.receive;
 
 import org.springframework.amqp.core.Message;
 import org.slf4j.Logger;
